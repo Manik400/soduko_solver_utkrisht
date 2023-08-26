@@ -62,6 +62,7 @@ class SudokuSolverPage extends StatelessWidget {
                             ? () {
                           debugPrint('Solving Board');
                           sudokuChangeNotifer.solveBoard();
+                          // Provider.of<SudokuChangeNotifier>(context, listen: false).solveBoard();
                         }
                             : null,
                       );
@@ -248,6 +249,7 @@ class KeyPadCell extends StatelessWidget {
         child: Text(
           '$number',
         ),
+
       ),
     );
   }
@@ -313,7 +315,7 @@ class SudokuChangeNotifier with ChangeNotifier {
   }
 
   void solveBoard() {
-    solver.solveSudoku(this.board);
+    this.board = solver.solveSudoku(this.board);
     // Notifying listeners, as board changed
     // so need to rebuild all widgets using board.
     notifyListeners();

@@ -34,11 +34,11 @@ class SudokuSolver {
     }
   }
 
-  Map<String, int?> getNextEmptyCell(List<List<int>> board) {
+  Map<String, int> getNextEmptyCell(List<List<int>> board) {
     for (int i = 0; i < board.length; i++)
       for (int j = 0; j < board.length; j++)
         if (board[i][j] == 0) return {'row': i, 'col': j};
-    return {'row': null, 'col': null};
+    return {'row' : -1, 'col' : -1};
   }
 
   void printBoard(List<List<int>> board) {
@@ -47,13 +47,14 @@ class SudokuSolver {
 
   List<List<int>> solveSudoku(List<List<int>> board) {
     Queue<SudokuCell> cellStack = Queue<SudokuCell>();
-    Map<String, int?> nextEmptyCell = this.getNextEmptyCell(board);
+    Map<String, int> nextEmptyCell = this.getNextEmptyCell(board);
     SudokuCell current = SudokuCell(
       row: nextEmptyCell['row']!,
       col: nextEmptyCell['col']!,
       board: board,
     );
     while (true) {
+      if(current.row == -1 || current.col == -1)break;
       this.calculatePossibilities(current, board);
       if (current.getNumberOfChoices() == 0) {
         // Wrong Route!, so reset stuff (backtrack!)
@@ -92,7 +93,7 @@ class SudokuSolver {
         nextEmptyCell = this.getNextEmptyCell(board);
 
         // No cells are empty, break from loop.
-        if (nextEmptyCell == null) break;
+        if (nextEmptyCell['row'] == -1 || nextEmptyCell['col'] == -1) break;
 
         // update current to point to the new sudoku cell
         current = new SudokuCell(
